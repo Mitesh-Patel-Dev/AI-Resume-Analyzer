@@ -1,0 +1,13 @@
+{
+  "name": "ai-resume-analyzer",
+  "version": "1.0.0",
+  "description": "AI-Powered Resume Analyzer with ATS Optimization",
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "cd frontend && npm install && npm run build",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "render-build": "cd backend && npm install && cd ../frontend && npm install && npm run build"
+  }
+}
