@@ -24,9 +24,18 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/resume", resumeRoutes);
 
-// Health check
+// Health check (includes DB connection status)
+const mongoose = require("mongoose");
 app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", message: "AI Resume Analyzer API is running 🚀" });
+    res.json({
+        status: "ok",
+        message: "AI Resume Analyzer API is running 🚀",
+        mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+        env: {
+            MONGO_URI: process.env.MONGO_URI ? "✅ set" : "❌ missing",
+            JWT_SECRET: process.env.JWT_SECRET ? "✅ set" : "❌ missing",
+        },
+    });
 });
 
 // ─── Serve Frontend in Production ───

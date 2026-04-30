@@ -32,8 +32,13 @@ const signup = async (req, res) => {
             res.status(400).json({ message: "Invalid user data" });
         }
     } catch (error) {
-        console.error("Signup error:", error.message);
-        res.status(500).json({ message: "Server error during signup" });
+        console.error("Signup error:", error.message, error.stack);
+        // Return specific error for debugging
+        if (error.name === "ValidationError") {
+            const messages = Object.values(error.errors).map((e) => e.message);
+            return res.status(400).json({ message: messages.join(", ") });
+        }
+        res.status(500).json({ message: "Server error during signup: " + error.message });
     }
 };
 
