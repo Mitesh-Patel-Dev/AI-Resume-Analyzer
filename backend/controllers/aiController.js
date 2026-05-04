@@ -88,27 +88,29 @@ ${resume.extractedText}`;
       resumeId: resume._id,
     });
   } catch (error) {
-    console.error("AI Generation Error:", error.message);
+    console.error("AI Generation Error:", error.message, error.status, JSON.stringify(error));
 
-    // Handle specific Gemini API errors
-    if (error.message?.includes("API_KEY")) {
-      return res.status(500).json({
-        message: "Invalid Gemini API key. Please check your configuration.",
+    // Get HTTP status from Gemini error if available
+    const status = error.status || error.httpStatusCode || 500;
+
+    if (status === 429) {
+      return res.status(429).json({
+        message: "AI rate limit reached. Please wait 60 seconds and try again.",
       });
     }
-    if (error.message?.includes("RATE_LIMIT") || error.message?.includes("429")) {
-      return res.status(429).json({
-        message: "AI rate limit reached. Please try again in a few seconds.",
+    if (error.message?.includes("API_KEY_INVALID") || error.message?.includes("API key not valid")) {
+      return res.status(500).json({
+        message: "Invalid Gemini API key. Please check your GEMINI_API_KEY.",
       });
     }
     if (error.message?.includes("SAFETY")) {
       return res.status(400).json({
-        message: "Content was flagged by safety filters. Please review your resume content.",
+        message: "Content was flagged by safety filters. Please review your resume.",
       });
     }
 
     res.status(500).json({
-      message: "Failed to generate optimized resume: " + error.message,
+      message: "AI generation failed: " + error.message,
     });
   }
 };
