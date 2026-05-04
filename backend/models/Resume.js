@@ -135,6 +135,12 @@ const resumeSchema = new mongoose.Schema(
       default: 1,
     },
 
+    // ─── AI-Generated Resume (Auto-Fix) ───
+    aiGeneratedResume: {
+      type: String,
+      default: "",
+    },
+
     analysisComplete: {
       type: Boolean,
       default: false,

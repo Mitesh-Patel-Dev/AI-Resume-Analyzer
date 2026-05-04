@@ -8,6 +8,7 @@ const {
     deleteResume,
 } = require("../controllers/resumeController");
 const { generateReport } = require("../controllers/reportController");
+const { generateOptimizedResume } = require("../controllers/aiController");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -40,6 +41,7 @@ const upload = multer({
 
 // All routes are protected (require login)
 router.post("/upload", protect, upload.single("resume"), uploadResume);
+router.post("/generate-optimized", protect, generateOptimizedResume);
 router.get("/my-resumes", protect, getMyResumes);
 router.get("/:id", protect, getResumeById);
 router.get("/:id/report", protect, generateReport);

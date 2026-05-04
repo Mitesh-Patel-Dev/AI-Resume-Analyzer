@@ -16,6 +16,7 @@ import {
   FiAlertCircle,
 } from "react-icons/fi";
 import { HiOutlineSparkles, HiOutlineLightBulb } from "react-icons/hi2";
+import AutoFixResume from "../components/AutoFixResume";
 
 // ─── Mini Progress Bar Component ───
 const ProgressBar = ({ value, max, color }) => {
@@ -115,6 +116,7 @@ const Results = () => {
     { key: "roles", label: "Job Roles" },
     { key: "feedback", label: "Feedback" },
     { key: "suggestions", label: "Suggestions" },
+    { key: "ai-builder", label: "✨ AI Builder" },
   ];
 
   return (
@@ -561,6 +563,15 @@ const Results = () => {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════
+            TAB: AI BUILDER
+        ═══════════════════════════════════════ */}
+        {activeTab === "ai-builder" && (
+          <div className="animate-fade-in">
+            <AutoFixResume resumeId={id} />
           </div>
         )}
 

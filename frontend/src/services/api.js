@@ -29,4 +29,8 @@ export const getResumeById = (id) => API.get(`/resume/${id}`);
 export const deleteResume = (id) => API.delete(`/resume/${id}`);
 export const getReportUrl = (id) => `/api/resume/${id}/report`;
 
+// ─── AI Resume Builder ───
+export const generateOptimizedResume = (resumeId) =>
+    API.post("/resume/generate-optimized", { resumeId });
+
 export default API;
