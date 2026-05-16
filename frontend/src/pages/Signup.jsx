@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../services/api";
 import { useAuth } from "../context/AuthContext";
-import { FiMail, FiLock, FiUser, FiArrowRight } from "react-icons/fi";
-import { HiOutlineSparkles } from "react-icons/hi2";
+import { FiMail, FiLock, FiUser, FiArrowRight, FiUploadCloud, FiZap, FiBarChart2 } from "react-icons/fi";
 
 const Signup = () => {
     const [name, setName] = useState("");
@@ -37,58 +36,76 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 pt-16">
-            {/* Background Effects */}
-            <div className="fixed inset-0 -z-10">
-                <div className="absolute top-1/3 right-1/3 w-96 h-96 bg-accent-600/20 rounded-full blur-[120px]" />
-                <div className="absolute bottom-1/3 left-1/3 w-96 h-96 bg-primary-600/15 rounded-full blur-[120px]" />
+        <div className="min-h-screen flex pt-16">
+            {/* Left — Branding Panel */}
+            <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-accent-950/40 via-surface-900 to-surface-950 items-center justify-center p-12">
+                <div className="absolute inset-0 bg-gradient-to-br from-accent-500/[0.04] to-brand-500/[0.06]" />
+                <div className="relative max-w-md">
+                    <div className="w-12 h-12 bg-gradient-to-br from-accent-500 to-brand-500 rounded-xl flex items-center justify-center mb-8 shadow-lg shadow-accent-500/20">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                    </div>
+                    <h2 className="heading-lg text-3xl text-white mb-4">
+                        Start your journey with ResumeAI
+                    </h2>
+                    <p className="text-surface-400 leading-relaxed mb-10">
+                        Create your free account and get instant AI-powered resume analysis with actionable insights.
+                    </p>
+
+                    <div className="space-y-5">
+                        {[
+                            { icon: FiUploadCloud, text: "Upload & analyze in under 30 seconds" },
+                            { icon: FiZap, text: "AI-powered resume rewriting" },
+                            { icon: FiBarChart2, text: "Detailed score with improvement tips" },
+                        ].map((item, i) => (
+                            <div key={i} className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-lg bg-accent-500/10 flex items-center justify-center">
+                                    <item.icon className="text-accent-400 text-sm" />
+                                </div>
+                                <span className="text-sm text-surface-300">{item.text}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <div className="w-full max-w-md animate-fade-in">
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="w-14 h-14 bg-gradient-to-br from-accent-500 to-primary-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-accent-500/30">
-                        <HiOutlineSparkles className="text-white text-2xl" />
+            {/* Right — Form */}
+            <div className="flex-1 flex items-center justify-center px-4 sm:px-8">
+                <div className="w-full max-w-md animate-fade-in">
+                    <div className="mb-8">
+                        <h1 className="heading-lg text-2xl text-white mb-2">Create account</h1>
+                        <p className="text-surface-500">Fill in your details to get started</p>
                     </div>
-                    <h1 className="text-3xl font-bold text-white mb-2">Create account</h1>
-                    <p className="text-dark-400">Start analyzing your resume with AI</p>
-                </div>
 
-                {/* Form Card */}
-                <div className="glass-card p-8">
                     {error && (
-                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm animate-slide-up">
+                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm animate-scale-in">
                             {error}
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        {/* Name */}
                         <div>
-                            <label className="block text-sm font-medium text-dark-300 mb-2">
-                                Full name
-                            </label>
+                            <label className="block text-sm font-medium text-surface-300 mb-2">Full name</label>
                             <div className="relative">
-                                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-500" />
+                                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-500" />
                                 <input
                                     id="signup-name"
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     required
-                                    placeholder="John Doe"
-                                    className="w-full pl-11 pr-4 py-3 bg-dark-800/50 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                                    placeholder="Mitesh Patel"
+                                    className="w-full pl-11 pr-4 py-3 bg-surface-900/50 border border-surface-700/60 rounded-xl text-white placeholder-surface-600 transition-all"
                                 />
                             </div>
                         </div>
 
-                        {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-dark-300 mb-2">
-                                Email address
-                            </label>
+                            <label className="block text-sm font-medium text-surface-300 mb-2">Email address</label>
                             <div className="relative">
-                                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-500" />
+                                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-500" />
                                 <input
                                     id="signup-email"
                                     type="email"
@@ -96,18 +113,15 @@ const Signup = () => {
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     placeholder="you@example.com"
-                                    className="w-full pl-11 pr-4 py-3 bg-dark-800/50 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                                    className="w-full pl-11 pr-4 py-3 bg-surface-900/50 border border-surface-700/60 rounded-xl text-white placeholder-surface-600 transition-all"
                                 />
                             </div>
                         </div>
 
-                        {/* Password */}
                         <div>
-                            <label className="block text-sm font-medium text-dark-300 mb-2">
-                                Password
-                            </label>
+                            <label className="block text-sm font-medium text-surface-300 mb-2">Password</label>
                             <div className="relative">
-                                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-500" />
+                                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-surface-500" />
                                 <input
                                     id="signup-password"
                                     type="password"
@@ -115,35 +129,30 @@ const Signup = () => {
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                     placeholder="Min. 6 characters"
-                                    className="w-full pl-11 pr-4 py-3 bg-dark-800/50 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
+                                    className="w-full pl-11 pr-4 py-3 bg-surface-900/50 border border-surface-700/60 rounded-xl text-white placeholder-surface-600 transition-all"
                                 />
                             </div>
                         </div>
 
-                        {/* Submit */}
                         <button
                             id="signup-submit"
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3 bg-gradient-to-r from-accent-600 to-primary-600 hover:from-accent-500 hover:to-primary-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-accent-500/25 hover:shadow-accent-500/40 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full btn-primary flex items-center justify-center gap-2 !py-3.5 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                             ) : (
                                 <>
-                                    Create Account
-                                    <FiArrowRight />
+                                    Create Account <FiArrowRight />
                                 </>
                             )}
                         </button>
                     </form>
 
-                    <p className="text-center text-dark-400 text-sm mt-6">
+                    <p className="text-center text-surface-500 text-sm mt-8">
                         Already have an account?{" "}
-                        <Link
-                            to="/login"
-                            className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
-                        >
+                        <Link to="/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">
                             Sign in
                         </Link>
                     </p>

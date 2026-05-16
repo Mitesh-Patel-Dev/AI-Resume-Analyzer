@@ -1,43 +1,45 @@
 import { Link } from "react-router-dom";
-import { HiOutlineSparkles } from "react-icons/hi2";
-import { FiGithub, FiMail, FiHeart } from "react-icons/fi";
+import { FiGithub, FiMail, FiLinkedin } from "react-icons/fi";
 
 const Footer = () => {
     return (
-        <footer className="border-t border-dark-800/50 bg-dark-950/80 backdrop-blur-sm">
-            <div className="max-w-6xl mx-auto px-4 py-12">
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <footer className="border-t border-surface-800/50 bg-[#080e1a]">
+            <div className="max-w-6xl mx-auto px-4 py-14">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
                     {/* Brand */}
                     <div className="sm:col-span-2 lg:col-span-1">
-                        <Link to="/" className="flex items-center gap-2 mb-4 group">
-                            <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/20">
-                                <HiOutlineSparkles className="text-white text-sm" />
+                        <Link to="/" className="flex items-center gap-2 mb-4">
+                            <div className="w-7 h-7 bg-gradient-to-br from-brand-500 to-accent-500 rounded-lg flex items-center justify-center">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                </svg>
                             </div>
-                            <span className="text-base font-bold text-white">
-                                AI Resume Analyzer
+                            <span className="text-base font-heading font-bold text-surface-200">
+                                ResumeAI
                             </span>
                         </Link>
-                        <p className="text-dark-500 text-sm leading-relaxed">
-                            Upload your resume and receive AI-powered insights to improve
-                            your chances of landing interviews.
+                        <p className="text-surface-500 text-sm leading-relaxed max-w-xs">
+                            AI-powered resume analysis and optimization.
+                            Built as a BCA Final Year Project.
                         </p>
                     </div>
 
-                    {/* Quick Links */}
+                    {/* Product */}
                     <div>
-                        <h4 className="text-sm font-semibold text-dark-300 uppercase tracking-wider mb-4">
+                        <h4 className="text-sm font-heading font-semibold text-surface-300 mb-4">
                             Product
                         </h4>
                         <ul className="space-y-2.5">
                             {[
                                 { label: "Upload Resume", to: "/upload" },
                                 { label: "Dashboard", to: "/dashboard" },
-                                { label: "How It Works", to: "/#how-it-works" },
+                                { label: "About", to: "/about" },
                             ].map((link, i) => (
                                 <li key={i}>
                                     <Link
                                         to={link.to}
-                                        className="text-sm text-dark-500 hover:text-primary-400 transition-colors"
+                                        className="text-sm text-surface-500 hover:text-brand-400 transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -48,18 +50,19 @@ const Footer = () => {
 
                     {/* Account */}
                     <div>
-                        <h4 className="text-sm font-semibold text-dark-300 uppercase tracking-wider mb-4">
+                        <h4 className="text-sm font-heading font-semibold text-surface-300 mb-4">
                             Account
                         </h4>
                         <ul className="space-y-2.5">
                             {[
                                 { label: "Sign Up", to: "/signup" },
-                                { label: "Login", to: "/login" },
+                                { label: "Log In", to: "/login" },
+                                { label: "Profile", to: "/profile" },
                             ].map((link, i) => (
                                 <li key={i}>
                                     <Link
                                         to={link.to}
-                                        className="text-sm text-dark-500 hover:text-primary-400 transition-colors"
+                                        className="text-sm text-surface-500 hover:text-brand-400 transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -68,39 +71,48 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Contact */}
+                    {/* Connect */}
                     <div>
-                        <h4 className="text-sm font-semibold text-dark-300 uppercase tracking-wider mb-4">
+                        <h4 className="text-sm font-heading font-semibold text-surface-300 mb-4">
                             Connect
                         </h4>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <a
-                                href="mailto:contact@airesumeanalyzer.com"
-                                className="w-9 h-9 bg-dark-800 hover:bg-primary-500/20 border border-dark-700 hover:border-primary-500/30 rounded-lg flex items-center justify-center text-dark-500 hover:text-primary-400 transition-all"
+                                href="https://github.com/Mitesh-Patel-Dev/AI-Resume-Analyzer"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-9 h-9 bg-surface-800/60 hover:bg-brand-500/15 border border-surface-700/50 hover:border-brand-500/30 rounded-lg flex items-center justify-center text-surface-500 hover:text-brand-400 transition-all"
+                                title="GitHub"
+                            >
+                                <FiGithub className="text-sm" />
+                            </a>
+                            <a
+                                href="mailto:miteshpatel2212@gmail.com"
+                                className="w-9 h-9 bg-surface-800/60 hover:bg-brand-500/15 border border-surface-700/50 hover:border-brand-500/30 rounded-lg flex items-center justify-center text-surface-500 hover:text-brand-400 transition-all"
                                 title="Email"
                             >
                                 <FiMail className="text-sm" />
                             </a>
                             <a
-                                href="https://github.com"
+                                href="https://linkedin.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-9 h-9 bg-dark-800 hover:bg-primary-500/20 border border-dark-700 hover:border-primary-500/30 rounded-lg flex items-center justify-center text-dark-500 hover:text-primary-400 transition-all"
-                                title="GitHub"
+                                className="w-9 h-9 bg-surface-800/60 hover:bg-brand-500/15 border border-surface-700/50 hover:border-brand-500/30 rounded-lg flex items-center justify-center text-surface-500 hover:text-brand-400 transition-all"
+                                title="LinkedIn"
                             >
-                                <FiGithub className="text-sm" />
+                                <FiLinkedin className="text-sm" />
                             </a>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="pt-8 border-t border-dark-800/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p className="text-dark-600 text-sm">
-                        © {new Date().getFullYear()} AI Resume Analyzer. All rights reserved.
+                {/* Bottom */}
+                <div className="pt-8 border-t border-surface-800/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p className="text-surface-600 text-sm">
+                        © {new Date().getFullYear()} ResumeAI — BCA Final Year Project
                     </p>
-                    <p className="flex items-center gap-1 text-dark-600 text-sm">
-                        Made with <FiHeart className="text-red-500 text-xs" /> for students
+                    <p className="text-surface-700 text-xs">
+                        Built by Mitesh Patel • AI-Powered Resume Analyzer with ATS Optimization
                     </p>
                 </div>
             </div>

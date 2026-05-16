@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -9,18 +9,22 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Results from "./pages/Results";
+import About from "./pages/About";
+import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 
 function App() {
     return (
         <AuthProvider>
             <Router>
-                <div className="min-h-screen bg-dark-950 flex flex-col">
+                <div className="min-h-screen bg-[#0c1222] flex flex-col">
                     <Navbar />
                     <main className="flex-1">
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<Signup />} />
+                            <Route path="/about" element={<About />} />
                             <Route
                                 path="/dashboard"
                                 element={
@@ -45,7 +49,15 @@ function App() {
                                     </PrivateRoute>
                                 }
                             />
-                            <Route path="*" element={<Navigate to="/" />} />
+                            <Route
+                                path="/profile"
+                                element={
+                                    <PrivateRoute>
+                                        <Profile />
+                                    </PrivateRoute>
+                                }
+                            />
+                            <Route path="*" element={<NotFound />} />
                         </Routes>
                     </main>
                     <Footer />

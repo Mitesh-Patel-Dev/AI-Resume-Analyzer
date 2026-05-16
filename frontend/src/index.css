@@ -1,8 +1,11 @@
+/* ─── Google Fonts ─── */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Global Styles ─── */
+/* ─── Base Reset ─── */
 * {
   margin: 0;
   padding: 0;
@@ -11,85 +14,230 @@
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background-color: #0f172a;
-  color: #f1f5f9;
+  background-color: #0c1222;
+  color: #e2e8f0;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Scrollbar Styling ─── */
+/* Subtle noise texture on body */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(16, 185, 129, 0.3);
+  color: #fff;
+}
+
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #1e293b;
+  background: #0f172a;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #4f46e5;
-  border-radius: 4px;
+  background: #1e293b;
+  border-radius: 3px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+  background: #334155;
 }
 
-/* ─── Glass Card Utility ─── */
-.glass-card {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(99, 102, 241, 0.15);
+/* ═══════════════════════════════════════
+   CARD SYSTEM (No more glass-card everywhere)
+   ═══════════════════════════════════════ */
+
+/* Default card — solid with subtle border */
+.card {
+  background: #111827;
+  border: 1px solid rgba(51, 65, 85, 0.5);
   border-radius: 16px;
+  transition: all 0.3s ease;
+}
+.card:hover {
+  border-color: rgba(51, 65, 85, 0.8);
+}
+
+/* Elevated card — with shadow lift */
+.card-elevated {
+  background: #111827;
+  border: 1px solid rgba(51, 65, 85, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+.card-elevated:hover {
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Outlined card — transparent with border */
+.card-outlined {
+  background: transparent;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+.card-outlined:hover {
+  background: rgba(17, 24, 39, 0.5);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* Surface card — subtle fill, no border emphasis */
+.card-surface {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(30, 41, 59, 0.5);
+  border-radius: 12px;
+}
+
+/* Glass card — ONLY for Navbar and overlays */
+.glass-card {
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(51, 65, 85, 0.4);
+  border-radius: 16px;
+}
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════ */
+
+.heading-xl {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.heading-lg {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 /* ─── Gradient Text ─── */
 .gradient-text {
-  background: linear-gradient(135deg, #818cf8, #e879f9, #818cf8);
+  background: linear-gradient(135deg, #10b981, #06b6d4, #10b981);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 3s ease infinite;
+  animation: shimmer 4s ease infinite;
+}
+
+.gradient-text-warm {
+  background: linear-gradient(135deg, #f59e0b, #ef4444, #f59e0b);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: 0% center;
-  }
-
-  100% {
-    background-position: 200% center;
-  }
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
 }
 
-/* ─── Glow Button ─── */
-.glow-button {
-  position: relative;
-  overflow: hidden;
+/* ═══════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════ */
+
+/* Emerald glow button */
+.btn-primary {
+  background: linear-gradient(135deg, #059669, #0891b2);
+  color: white;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 12px;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px -2px rgba(5, 150, 105, 0.35);
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 24px -2px rgba(5, 150, 105, 0.5);
+  transform: translateY(-1px);
 }
 
-.glow-button::before {
+/* Ghost button */
+.btn-ghost {
+  background: transparent;
+  color: #cbd5e1;
+  font-weight: 500;
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  background: rgba(30, 41, 59, 0.5);
+  border-color: rgba(51, 65, 85, 1);
+  color: #f1f5f9;
+}
+
+/* Tag / badge */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid;
+}
+.tag-brand {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #34d399;
+}
+.tag-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+}
+.tag-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+/* Divider with label */
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.divider-label::before,
+.divider-label::after {
   content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle,
-      rgba(99, 102, 241, 0.3) 0%,
-      transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.glow-button:hover::before {
-  opacity: 1;
+  flex: 1;
+  height: 1px;
+  background: rgba(51, 65, 85, 0.5);
 }
 
 /* ─── Score Circle ─── */
 .score-circle {
   transform: rotate(-90deg);
+}
+
+/* ─── Focus ring ─── */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
 }

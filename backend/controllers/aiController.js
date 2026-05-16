@@ -1,27 +1,10 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const Groq = require("groq-sdk");
 const Resume = require("../models/Resume");
 
 // ═══════════════════════════════════════════════════════════════
 //  AI Resume Builder Controller
-//  Uses Google Gemini to rewrite resumes with missing skills
+//  Uses Groq (Llama 3.3 70B) to rewrite resumes with missing skills
 // ═══════════════════════════════════════════════════════════════
-
-// Helper: retry with exponential backoff
-async function callGeminiWithRetry(model, prompt, maxRetries = 3) {
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const result = await model.generateContent(prompt);
-      return result.response.text();
-    } catch (error) {
-      console.error(`Gemini attempt ${attempt}/${maxRetries} failed:`, error.message);
-      if (attempt === maxRetries) throw error;
-      // Wait longer between each retry: 2s, 5s, 10s
-      const waitMs = attempt * 3000;
-      console.log(`Waiting ${waitMs}ms before retry...`);
-      await new Promise((resolve) => setTimeout(resolve, waitMs));
-    }
-  }
-}
 
 // @desc    Generate an AI-optimized resume
 // @route   POST /api/resume/generate-optimized
@@ -50,11 +33,11 @@ const generateOptimizedResume = async (req, res) => {
         .json({ message: "Resume text is too short to optimize." });
     }
 
-    // ─── Check for Gemini API key ───
-    if (!process.env.GEMINI_API_KEY) {
+    // ─── Check for API key ───
+    if (!process.env.GROQ_API_KEY) {
       return res.status(500).json({
         message:
-          "AI service is not configured. Please add GEMINI_API_KEY to environment variables.",
+          "AI service is not configured. Please add GROQ_API_KEY to environment variables.",
       });
     }
 
@@ -64,10 +47,17 @@ const generateOptimizedResume = async (req, res) => {
         ? resume.missingSkills.join(", ")
         : "None identified";
 
-    // Truncate resume text if too long (Gemini has token limits)
-    const resumeText = resume.extractedText.substring(0, 8000);
+    // Truncate resume text if too long
+    const resumeText = resume.extractedText.substring(0, 6000);
 
-    const prompt = `You are an expert ATS resume writer with 15 years of experience in tech recruitment. 
+    // ─── Call Groq API (Llama 3.3 70B) ───
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: `You are an expert ATS resume writer with 15 years of experience in tech recruitment. 
 
 TASK: Rewrite the following resume text to be highly professional, ATS-optimized, and impactful.
 
@@ -78,16 +68,19 @@ RULES:
 4. Maintain a clean, scannable format with clear section headers.
 5. Keep the tone professional and confident.
 6. Preserve the candidate's original information (name, education, contact) — do NOT fabricate details.
-7. Return ONLY the formatted resume text. No explanations, no markdown code blocks, no extra commentary.
+7. Return ONLY the formatted resume text. No explanations, no markdown code blocks, no extra commentary.`,
+        },
+        {
+          role: "user",
+          content: `Here is my resume text. Please rewrite it:\n\n${resumeText}`,
+        },
+      ],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: 4096,
+    });
 
-ORIGINAL RESUME TEXT:
-${resumeText}`;
-
-    // ─── Call Google Gemini API with retry ───
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const aiResumeText = await callGeminiWithRetry(model, prompt);
+    const aiResumeText = chatCompletion.choices[0]?.message?.content;
 
     if (!aiResumeText || aiResumeText.trim().length === 0) {
       return res.status(500).json({
@@ -108,21 +101,14 @@ ${resumeText}`;
   } catch (error) {
     console.error("AI Generation Error:", error.message, error.status);
 
-    const errMsg = error.message || "";
-
-    if (error.status === 429 || errMsg.includes("429") || errMsg.includes("RESOURCE_EXHAUSTED")) {
+    if (error.status === 429) {
       return res.status(429).json({
-        message: "AI is busy. Please wait 1-2 minutes and try again.",
+        message: "AI is busy. Please wait 1 minute and try again.",
       });
     }
-    if (errMsg.includes("API_KEY_INVALID") || errMsg.includes("API key not valid")) {
+    if (error.status === 401) {
       return res.status(500).json({
-        message: "Invalid Gemini API key. Please check your GEMINI_API_KEY.",
-      });
-    }
-    if (errMsg.includes("SAFETY")) {
-      return res.status(400).json({
-        message: "Content was flagged by safety filters. Please review your resume.",
+        message: "Invalid API key. Please check your GROQ_API_KEY.",
       });
     }
 

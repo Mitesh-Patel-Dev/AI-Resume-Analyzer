@@ -1,326 +1,378 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
-    FiUploadCloud,
-    FiCpu,
-    FiBarChart2,
-    FiCheckCircle,
-    FiArrowRight,
-    FiZap,
-    FiShield,
-    FiClock,
-    FiTarget,
-    FiTrendingUp,
-    FiAward,
+    FiUploadCloud, FiCpu, FiBarChart2, FiCheckCircle, FiArrowRight,
+    FiZap, FiShield, FiTarget, FiTrendingUp, FiAward, FiChevronDown,
+    FiFileText, FiLayers, FiRefreshCw,
 } from "react-icons/fi";
-import { HiOutlineSparkles } from "react-icons/hi2";
+
+// ─── FAQ Accordion Item ───
+const FAQItem = ({ question, answer, isOpen, toggle }) => (
+    <div className="border-b border-surface-800/50 last:border-0">
+        <button
+            onClick={toggle}
+            className="w-full flex items-center justify-between py-5 text-left group"
+        >
+            <span className="text-surface-200 font-medium group-hover:text-white transition-colors pr-4">
+                {question}
+            </span>
+            <FiChevronDown
+                className={`text-surface-500 flex-shrink-0 transition-transform duration-300 ${
+                    isOpen ? "rotate-180 text-brand-400" : ""
+                }`}
+            />
+        </button>
+        <div
+            className={`overflow-hidden transition-all duration-300 ${
+                isOpen ? "max-h-40 pb-5" : "max-h-0"
+            }`}
+        >
+            <p className="text-surface-400 text-sm leading-relaxed">{answer}</p>
+        </div>
+    </div>
+);
 
 const Home = () => {
     const { user } = useAuth();
+    const [openFaq, setOpenFaq] = useState(0);
+
+    const faqs = [
+        { q: "Is this tool really free?", a: "Yes, completely free. No credit card required. Upload as many resumes as you want." },
+        { q: "What file formats do you support?", a: "Currently, we support PDF files up to 5MB. We extract text directly from the PDF for analysis." },
+        { q: "How is the ATS score calculated?", a: "We evaluate your resume across 4 dimensions: Content quality (30pts), Skills coverage (35pts), Formatting standards (20pts), and Impact/action verbs (15pts)." },
+        { q: "Is my resume data secure?", a: "Yes. Your data is protected with JWT authentication. Only you can access your uploaded resumes and analysis results." },
+        { q: "What is the AI Resume Builder?", a: "Our AI Builder uses a large language model to rewrite your resume, integrating missing skills and optimizing it for ATS systems automatically." },
+    ];
 
     return (
         <div className="min-h-screen">
             {/* ═══════════════════════════════════════════
-          HERO SECTION
-      ═══════════════════════════════════════════ */}
-            <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
-                {/* Animated Background */}
+                HERO — Asymmetric Layout
+            ═══════════════════════════════════════════ */}
+            <section className="relative min-h-screen flex items-center px-4 overflow-hidden">
+                {/* Background: subtle gradient, no animated orbs */}
                 <div className="absolute inset-0 -z-10">
-                    <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary-600/20 rounded-full blur-[150px] animate-pulse" />
-                    <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent-600/15 rounded-full blur-[130px] animate-pulse" style={{ animationDelay: "1s" }} />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary-500/10 rounded-full blur-[100px]" />
-
-                    {/* Grid Pattern */}
-                    <div
-                        className="absolute inset-0 opacity-[0.03]"
-                        style={{
-                            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-                            backgroundSize: "60px 60px",
-                        }}
-                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-brand-950/40 via-transparent to-accent-950/20" />
+                    <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-brand-500/[0.04] to-transparent" />
                 </div>
 
-                <div className="max-w-5xl mx-auto text-center pt-20 animate-fade-in">
-                    {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500/10 border border-primary-500/20 rounded-full mb-8">
-                        <HiOutlineSparkles className="text-primary-400" />
-                        <span className="text-sm text-primary-300 font-medium">
-                            AI-Powered Resume Analysis
-                        </span>
-                    </div>
-
-                    {/* Main Heading */}
-                    <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
-                        Land Your Dream Job
-                        <br />
-                        <span className="gradient-text">With a Perfect Resume</span>
-                    </h1>
-
-                    {/* Subtitle */}
-                    <p className="text-lg sm:text-xl text-dark-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Upload your resume and get an instant <strong className="text-dark-200">ATS compatibility score</strong>,
-                        skill analysis, and personalized improvement suggestions — all powered by AI.
-                    </p>
-
-                    {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                        <Link
-                            to={user ? "/upload" : "/signup"}
-                            className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white font-bold text-lg rounded-2xl transition-all shadow-2xl shadow-primary-500/30 hover:shadow-primary-500/50 hover:scale-105"
-                        >
-                            Analyze My Resume
-                            <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                        <Link
-                            to={user ? "/dashboard" : "/login"}
-                            className="flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-semibold text-lg rounded-2xl transition-all"
-                        >
-                            {user ? "Go to Dashboard" : "Sign In"}
-                        </Link>
-                    </div>
-
-                    {/* Stats Row */}
-                    <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12">
-                        {[
-                            { value: "80+", label: "Skills Detected" },
-                            { value: "7", label: "Scoring Criteria" },
-                            { value: "30s", label: "Instant Analysis" },
-                            { value: "Free", label: "No Credit Card" },
-                        ].map((stat, i) => (
-                            <div key={i} className="text-center">
-                                <p className="text-2xl sm:text-3xl font-bold text-white">{stat.value}</p>
-                                <p className="text-sm text-dark-500 mt-1">{stat.label}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Scroll Indicator */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-                    <span className="text-xs text-dark-600">Scroll</span>
-                    <div className="w-5 h-8 border-2 border-dark-600 rounded-full flex justify-center pt-1">
-                        <div className="w-1 h-2 bg-dark-500 rounded-full" />
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════
-          HOW IT WORKS
-      ═══════════════════════════════════════════ */}
-            <section className="py-24 px-4 relative">
-                <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-primary-950/30 to-transparent" />
-                <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16">
-                        <span className="text-sm font-semibold text-primary-400 uppercase tracking-wider">How It Works</span>
-                        <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">
-                            Three Simple Steps to a <span className="gradient-text">Better Resume</span>
-                        </h2>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {[
-                            {
-                                step: "01",
-                                icon: FiUploadCloud,
-                                title: "Upload Resume",
-                                desc: "Drag and drop your PDF resume or click to browse. We accept files up to 5MB.",
-                                color: "primary",
-                            },
-                            {
-                                step: "02",
-                                icon: FiCpu,
-                                title: "AI Analysis",
-                                desc: "Our engine extracts text, detects skills, and evaluates your resume across 7 key criteria.",
-                                color: "accent",
-                            },
-                            {
-                                step: "03",
-                                icon: FiBarChart2,
-                                title: "Get Results",
-                                desc: "Receive your ATS score, detected skills, missing skills, and actionable improvement tips.",
-                                color: "green",
-                            },
-                        ].map((item, i) => (
-                            <div
-                                key={i}
-                                className="relative glass-card p-8 group hover:border-primary-500/30 transition-all hover:-translate-y-1"
-                            >
-                                {/* Step Number */}
-                                <span className="absolute top-6 right-6 text-5xl font-extrabold text-white/[0.03] select-none">
-                                    {item.step}
+                <div className="max-w-7xl mx-auto w-full pt-24 pb-16">
+                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                        {/* Left — Text */}
+                        <div className="animate-fade-in">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 rounded-full mb-6">
+                                <div className="w-1.5 h-1.5 bg-brand-400 rounded-full animate-pulse" />
+                                <span className="text-xs text-brand-300 font-medium tracking-wide uppercase">
+                                    AI-Powered Analysis
                                 </span>
-
-                                <div
-                                    className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${item.color === "primary"
-                                            ? "bg-primary-500/15 text-primary-400"
-                                            : item.color === "accent"
-                                                ? "bg-accent-500/15 text-accent-400"
-                                                : "bg-green-500/15 text-green-400"
-                                        }`}
-                                >
-                                    <item.icon className="text-2xl" />
-                                </div>
-
-                                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
-                                <p className="text-dark-400 leading-relaxed">{item.desc}</p>
-
-                                {/* Connector Line */}
-                                {i < 2 && (
-                                    <div className="hidden md:block absolute top-1/2 -right-4 w-8 border-t-2 border-dashed border-dark-700" />
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════
-          FEATURES SECTION
-      ═══════════════════════════════════════════ */}
-            <section className="py-24 px-4">
-                <div className="max-w-6xl mx-auto">
-                    <div className="text-center mb-16">
-                        <span className="text-sm font-semibold text-accent-400 uppercase tracking-wider">Features</span>
-                        <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">
-                            Everything You Need to <span className="gradient-text">Stand Out</span>
-                        </h2>
-                        <p className="text-dark-400 mt-4 max-w-2xl mx-auto">
-                            Our AI-powered analyzer gives you the edge in today's competitive job market
-                        </p>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[
-                            {
-                                icon: FiTarget,
-                                title: "ATS Score (0-100)",
-                                desc: "See exactly how well your resume will perform against Applicant Tracking Systems.",
-                                gradient: "from-blue-500/20 to-primary-500/20",
-                                iconColor: "text-blue-400",
-                            },
-                            {
-                                icon: FiCheckCircle,
-                                title: "Skill Detection",
-                                desc: "We identify 80+ technical and soft skills across 7 categories in your resume.",
-                                gradient: "from-green-500/20 to-emerald-500/20",
-                                iconColor: "text-green-400",
-                            },
-                            {
-                                icon: FiZap,
-                                title: "Missing Skills",
-                                desc: "Know which in-demand skills you should add to match current job market trends.",
-                                gradient: "from-orange-500/20 to-amber-500/20",
-                                iconColor: "text-orange-400",
-                            },
-                            {
-                                icon: FiTrendingUp,
-                                title: "Smart Suggestions",
-                                desc: "Get AI-powered personalized tips to dramatically improve your resume quality.",
-                                gradient: "from-accent-500/20 to-pink-500/20",
-                                iconColor: "text-accent-400",
-                            },
-                            {
-                                icon: FiShield,
-                                title: "Secure & Private",
-                                desc: "Your data is protected with JWT authentication. Only you can access your resumes.",
-                                gradient: "from-primary-500/20 to-violet-500/20",
-                                iconColor: "text-primary-400",
-                            },
-                            {
-                                icon: FiClock,
-                                title: "Instant Results",
-                                desc: "Get comprehensive analysis in under 30 seconds — no waiting, no queues.",
-                                gradient: "from-cyan-500/20 to-teal-500/20",
-                                iconColor: "text-cyan-400",
-                            },
-                        ].map((feature, i) => (
-                            <div
-                                key={i}
-                                className="glass-card p-6 group hover:border-primary-500/20 transition-all hover:-translate-y-1"
-                            >
-                                <div
-                                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4`}
-                                >
-                                    <feature.icon className={`text-xl ${feature.iconColor}`} />
-                                </div>
-                                <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                                <p className="text-dark-400 text-sm leading-relaxed">{feature.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════
-          SCORING CRITERIA SECTION
-      ═══════════════════════════════════════════ */}
-            <section className="py-24 px-4 relative">
-                <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-accent-950/20 to-transparent" />
-                <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-16">
-                        <span className="text-sm font-semibold text-primary-400 uppercase tracking-wider">Scoring Engine</span>
-                        <h2 className="text-3xl sm:text-4xl font-bold text-white mt-3">
-                            How We Score <span className="gradient-text">Your Resume</span>
-                        </h2>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-5">
-                        {[
-                            { label: "Technical & Soft Skills", points: "35 pts", desc: "We scan for 80+ skills across programming, frameworks, databases, cloud, and more." },
-                            { label: "Resume Sections", points: "20 pts", desc: "Checks for key sections like Experience, Education, Skills, Projects, and Summary." },
-                            { label: "Contact Information", points: "10 pts", desc: "Verifies email, phone number, and LinkedIn profile are present." },
-                            { label: "Resume Length", points: "10 pts", desc: "Evaluates if your resume is the optimal length (300-600 words for one page)." },
-                            { label: "Action Verbs", points: "10 pts", desc: "Looks for strong action verbs like Developed, Managed, Implemented, Built." },
-                            { label: "Quantifiable Results", points: "10 pts", desc: "Detects metrics and numbers like '40% improvement' or '$2M revenue'." },
-                            { label: "Formatting Quality", points: "5 pts", desc: "Checks for professional language, impact-driven phrasing, and keyword usage." },
-                        ].map((criteria, i) => (
-                            <div
-                                key={i}
-                                className="flex items-start gap-4 p-5 bg-dark-800/30 hover:bg-dark-800/50 border border-dark-700/30 rounded-2xl transition-all"
-                            >
-                                <div className="flex-shrink-0 w-16 text-center">
-                                    <span className="text-lg font-bold text-primary-400">{criteria.points}</span>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-white mb-1">{criteria.label}</h4>
-                                    <p className="text-dark-500 text-sm leading-relaxed">{criteria.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════
-          FINAL CTA SECTION
-      ═══════════════════════════════════════════ */}
-            <section className="py-24 px-4">
-                <div className="max-w-3xl mx-auto text-center">
-                    <div className="glass-card p-12 md:p-16 relative overflow-hidden">
-                        {/* Background Glow */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-gradient-to-b from-primary-500/20 to-transparent blur-[80px]" />
-
-                        <div className="relative">
-                            <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-primary-500/30">
-                                <FiAward className="text-white text-2xl" />
                             </div>
 
-                            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-                                Ready to Improve Your Resume?
-                            </h2>
-                            <p className="text-dark-400 text-lg mb-8 max-w-lg mx-auto">
-                                Join thousands of job seekers who've improved their interview chances with AI-powered analysis.
+                            <h1 className="heading-xl text-4xl sm:text-5xl lg:text-6xl text-white mb-6">
+                                Your resume,
+                                <br />
+                                <span className="gradient-text">optimized by AI</span>
+                            </h1>
+
+                            <p className="text-lg text-surface-400 max-w-lg mb-8 leading-relaxed">
+                                Upload your resume and get an instant ATS compatibility score,
+                                skill gap analysis, job role matching, and AI-powered rewriting —
+                                all in under 30 seconds.
                             </p>
 
+                            <div className="flex flex-col sm:flex-row gap-3 mb-12">
+                                <Link
+                                    to={user ? "/upload" : "/signup"}
+                                    className="btn-primary text-base flex items-center justify-center gap-2 !py-3.5 !px-8"
+                                >
+                                    Start Analyzing
+                                    <FiArrowRight />
+                                </Link>
+                                <Link
+                                    to="/about"
+                                    className="btn-ghost text-base flex items-center justify-center gap-2 !py-3.5"
+                                >
+                                    Learn More
+                                </Link>
+                            </div>
+
+                            {/* Mini stats */}
+                            <div className="flex gap-8">
+                                {[
+                                    { value: "150+", label: "Skills Detected" },
+                                    { value: "8", label: "Job Roles Matched" },
+                                    { value: "<30s", label: "Analysis Time" },
+                                ].map((s, i) => (
+                                    <div key={i}>
+                                        <p className="text-xl font-heading font-bold text-white">{s.value}</p>
+                                        <p className="text-xs text-surface-500 mt-0.5">{s.label}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Right — Visual mockup */}
+                        <div className="hidden lg:block animate-slide-in-right">
+                            <div className="relative">
+                                {/* Main card */}
+                                <div className="card-elevated p-6 relative z-10">
+                                    <div className="flex items-center justify-between mb-5">
+                                        <div>
+                                            <p className="text-xs text-surface-500 mb-1">ATS Score</p>
+                                            <p className="text-3xl font-heading font-bold text-white">78<span className="text-lg text-surface-500">/100</span></p>
+                                        </div>
+                                        <div className="w-16 h-16 rounded-full border-[3px] border-brand-500/30 flex items-center justify-center relative">
+                                            <svg className="absolute inset-0 score-circle" viewBox="0 0 64 64">
+                                                <circle cx="32" cy="32" r="28" fill="none" stroke="#059669" strokeWidth="3" strokeDasharray="176" strokeDashoffset="39" strokeLinecap="round" />
+                                            </svg>
+                                            <span className="text-sm font-bold text-brand-400">78%</span>
+                                        </div>
+                                    </div>
+                                    {/* Score bars */}
+                                    {[
+                                        { label: "Content", score: 24, max: 30, color: "#3b82f6" },
+                                        { label: "Skills", score: 28, max: 35, color: "#10b981" },
+                                        { label: "Formatting", score: 16, max: 20, color: "#8b5cf6" },
+                                        { label: "Impact", score: 10, max: 15, color: "#f59e0b" },
+                                    ].map((b, i) => (
+                                        <div key={i} className="mb-3 last:mb-0">
+                                            <div className="flex justify-between text-xs mb-1">
+                                                <span className="text-surface-400">{b.label}</span>
+                                                <span className="text-surface-500">{b.score}/{b.max}</span>
+                                            </div>
+                                            <div className="h-1.5 bg-surface-800 rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full rounded-full transition-all duration-1000"
+                                                    style={{ width: `${(b.score / b.max) * 100}%`, backgroundColor: b.color }}
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Floating skill tags */}
+                                <div className="absolute -top-4 -right-4 z-20 card p-3 animate-float">
+                                    <div className="flex items-center gap-2">
+                                        <FiCheckCircle className="text-brand-400 text-sm" />
+                                        <span className="text-xs text-surface-300 font-medium">React.js</span>
+                                    </div>
+                                </div>
+                                <div className="absolute -bottom-3 -left-6 z-20 card p-3 animate-float" style={{ animationDelay: "2s" }}>
+                                    <div className="flex items-center gap-2">
+                                        <FiZap className="text-amber-400 text-sm" />
+                                        <span className="text-xs text-surface-300 font-medium">+Docker missing</span>
+                                    </div>
+                                </div>
+
+                                {/* Background decoration */}
+                                <div className="absolute -inset-8 bg-gradient-to-br from-brand-500/5 to-accent-500/5 rounded-3xl -z-10" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════
+                HOW IT WORKS — Vertical Timeline
+            ═══════════════════════════════════════════ */}
+            <section className="py-24 px-4 relative">
+                <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-surface-900/50 to-transparent" />
+                <div className="max-w-4xl mx-auto">
+                    <div className="text-center mb-16">
+                        <p className="text-sm font-medium text-brand-400 uppercase tracking-wider mb-3">How It Works</p>
+                        <h2 className="heading-lg text-3xl sm:text-4xl text-white">
+                            Three steps to a <span className="gradient-text">better resume</span>
+                        </h2>
+                    </div>
+
+                    <div className="relative">
+                        {/* Vertical line */}
+                        <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-brand-500/50 via-accent-500/30 to-transparent hidden sm:block" />
+
+                        <div className="space-y-10">
+                            {[
+                                { icon: FiUploadCloud, title: "Upload your resume", desc: "Drag & drop your PDF resume. We extract every word using advanced text parsing.", num: "01", color: "brand" },
+                                { icon: FiCpu, title: "AI analyzes everything", desc: "Our engine scans 150+ skills, evaluates formatting, checks impact metrics, and matches you to 8 career profiles.", num: "02", color: "accent" },
+                                { icon: FiBarChart2, title: "Get actionable results", desc: "Receive your ATS score breakdown, missing skills, job role matches, section feedback, and an AI-rewritten version.", num: "03", color: "brand" },
+                            ].map((step, i) => (
+                                <div key={i} className="flex gap-6 sm:gap-8 items-start animate-fade-in" style={{ animationDelay: `${i * 0.15}s` }}>
+                                    <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                        step.color === "brand" ? "bg-brand-500/15" : "bg-accent-500/15"
+                                    }`}>
+                                        <step.icon className={`text-xl ${step.color === "brand" ? "text-brand-400" : "text-accent-400"}`} />
+                                    </div>
+                                    <div className="pt-1.5">
+                                        <p className="text-xs font-mono text-surface-600 mb-1">STEP {step.num}</p>
+                                        <h3 className="text-lg font-heading font-bold text-white mb-2">{step.title}</h3>
+                                        <p className="text-surface-400 text-sm leading-relaxed max-w-md">{step.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════
+                FEATURES — Bento Grid
+            ═══════════════════════════════════════════ */}
+            <section className="py-24 px-4">
+                <div className="max-w-6xl mx-auto">
+                    <div className="text-center mb-16">
+                        <p className="text-sm font-medium text-accent-400 uppercase tracking-wider mb-3">Features</p>
+                        <h2 className="heading-lg text-3xl sm:text-4xl text-white">
+                            Everything you need to <span className="gradient-text">stand out</span>
+                        </h2>
+                    </div>
+
+                    {/* Bento Grid — asymmetric sizes */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {/* Large card — ATS Score */}
+                        <div className="card-elevated p-7 sm:col-span-2 lg:col-span-2 lg:row-span-2">
+                            <div className="flex items-start gap-4 mb-5">
+                                <div className="w-11 h-11 bg-blue-500/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <FiTarget className="text-blue-400 text-xl" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-heading font-bold text-white mb-1">Multi-Dimensional ATS Scoring</h3>
+                                    <p className="text-surface-400 text-sm leading-relaxed">
+                                        Not just one number. We break your score into 4 categories so you know exactly what to fix.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                {[
+                                    { label: "Content", pts: "30 pts", icon: FiFileText, color: "blue" },
+                                    { label: "Skills", pts: "35 pts", icon: FiCheckCircle, color: "brand" },
+                                    { label: "Formatting", pts: "20 pts", icon: FiLayers, color: "purple" },
+                                    { label: "Impact", pts: "15 pts", icon: FiTrendingUp, color: "amber" },
+                                ].map((c, i) => (
+                                    <div key={i} className="card-surface p-4 text-center">
+                                        <c.icon className={`mx-auto text-lg mb-2 ${
+                                            c.color === "blue" ? "text-blue-400" :
+                                            c.color === "brand" ? "text-brand-400" :
+                                            c.color === "purple" ? "text-purple-400" : "text-amber-400"
+                                        }`} />
+                                        <p className="text-xs text-surface-500">{c.label}</p>
+                                        <p className="text-sm font-bold text-white mt-0.5">{c.pts}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Regular cards */}
+                        {[
+                            { icon: FiCheckCircle, title: "150+ Skill Detection", desc: "Scans across 9 categories: Frontend, Backend, DevOps, Data Science, Mobile, and more.", color: "brand" },
+                            { icon: FiZap, title: "Missing Skills Alert", desc: "Know which in-demand skills you're missing to match current job market trends.", color: "amber" },
+                            { icon: FiRefreshCw, title: "AI Resume Builder", desc: "One click to rewrite your entire resume with missing skills naturally integrated.", color: "accent" },
+                            { icon: FiShield, title: "Secure & Private", desc: "JWT authentication, encrypted storage. Only you can access your data.", color: "blue" },
+                        ].map((f, i) => (
+                            <div key={i} className="card-outlined p-6 group">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${
+                                    f.color === "brand" ? "bg-brand-500/10 group-hover:bg-brand-500/20" :
+                                    f.color === "amber" ? "bg-amber-500/10 group-hover:bg-amber-500/20" :
+                                    f.color === "accent" ? "bg-accent-500/10 group-hover:bg-accent-500/20" :
+                                    "bg-blue-500/10 group-hover:bg-blue-500/20"
+                                } transition-colors`}>
+                                    <f.icon className={`text-lg ${
+                                        f.color === "brand" ? "text-brand-400" :
+                                        f.color === "amber" ? "text-amber-400" :
+                                        f.color === "accent" ? "text-accent-400" : "text-blue-400"
+                                    }`} />
+                                </div>
+                                <h3 className="text-base font-heading font-semibold text-white mb-2">{f.title}</h3>
+                                <p className="text-surface-500 text-sm leading-relaxed">{f.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════
+                TESTIMONIALS
+            ═══════════════════════════════════════════ */}
+            <section className="py-24 px-4 relative">
+                <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-brand-950/20 to-transparent" />
+                <div className="max-w-5xl mx-auto">
+                    <div className="text-center mb-14">
+                        <p className="text-sm font-medium text-brand-400 uppercase tracking-wider mb-3">Testimonials</p>
+                        <h2 className="heading-lg text-3xl sm:text-4xl text-white">
+                            What students are saying
+                        </h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-5">
+                        {[
+                            { name: "Priya Sharma", role: "BCA Student, Mumbai University", text: "This tool helped me realize my resume was missing key skills like Docker and AWS. After adding them, I got 3 interview calls in a week!", avatar: "PS" },
+                            { name: "Rahul Verma", role: "MCA Graduate, IGNOU", text: "The ATS score breakdown is incredibly detailed. I went from a 42 to a 78 after following the suggestions. Best free tool I've found.", avatar: "RV" },
+                            { name: "Ananya Desai", role: "B.Tech CSE, Gujarat Tech", text: "The AI Resume Builder feature is amazing — it rewrote my resume with action verbs and metrics I never thought of. Highly recommended!", avatar: "AD" },
+                        ].map((t, i) => (
+                            <div key={i} className="card p-6">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-600 to-accent-600 flex items-center justify-center">
+                                        <span className="text-xs font-bold text-white">{t.avatar}</span>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-white">{t.name}</p>
+                                        <p className="text-xs text-surface-500">{t.role}</p>
+                                    </div>
+                                </div>
+                                <p className="text-surface-400 text-sm leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════
+                FAQ
+            ═══════════════════════════════════════════ */}
+            <section className="py-24 px-4">
+                <div className="max-w-2xl mx-auto">
+                    <div className="text-center mb-14">
+                        <p className="text-sm font-medium text-accent-400 uppercase tracking-wider mb-3">FAQ</p>
+                        <h2 className="heading-lg text-3xl text-white">Common questions</h2>
+                    </div>
+
+                    <div className="card p-6 sm:p-8">
+                        {faqs.map((faq, i) => (
+                            <FAQItem
+                                key={i}
+                                question={faq.q}
+                                answer={faq.a}
+                                isOpen={openFaq === i}
+                                toggle={() => setOpenFaq(openFaq === i ? -1 : i)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════
+                FINAL CTA
+            ═══════════════════════════════════════════ */}
+            <section className="py-24 px-4">
+                <div className="max-w-3xl mx-auto">
+                    <div className="card-elevated p-10 sm:p-14 text-center relative overflow-hidden">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[150px] bg-gradient-to-b from-brand-500/10 to-transparent blur-[60px]" />
+                        <div className="relative">
+                            <div className="w-14 h-14 bg-gradient-to-br from-brand-500 to-accent-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-brand-500/20">
+                                <FiAward className="text-white text-2xl" />
+                            </div>
+                            <h2 className="heading-lg text-3xl sm:text-4xl text-white mb-4">
+                                Ready to improve your resume?
+                            </h2>
+                            <p className="text-surface-400 text-lg mb-8 max-w-md mx-auto">
+                                Join students who've boosted their interview chances with AI-powered analysis.
+                            </p>
                             <Link
                                 to={user ? "/upload" : "/signup"}
-                                className="group inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 text-white font-bold text-lg rounded-2xl transition-all shadow-2xl shadow-primary-500/30 hover:shadow-primary-500/50 hover:scale-105"
+                                className="btn-primary text-base inline-flex items-center gap-2 !py-3.5 !px-10"
                             >
                                 Get Started Free
-                                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                                <FiArrowRight />
                             </Link>
-
-                            <p className="text-dark-600 text-sm mt-4">
+                            <p className="text-surface-600 text-xs mt-4">
                                 No credit card required • Instant results
                             </p>
                         </div>
