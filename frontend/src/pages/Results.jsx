@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getResumeById, getReportUrl } from "../services/api";
 import ScoreCircle from "../components/ScoreCircle";
@@ -17,6 +17,11 @@ import {
 } from "react-icons/fi";
 import { HiOutlineSparkles, HiOutlineLightBulb } from "react-icons/hi2";
 import AutoFixResume from "../components/AutoFixResume";
+import JDMatcher from "../components/JDMatcher";
+import InterviewQuestions from "../components/InterviewQuestions";
+import ResumeHeatmap from "../components/ResumeHeatmap";
+import AnalyticsCharts from "../components/AnalyticsCharts";
+import VoiceFeedback from "../components/VoiceFeedback";
 
 // â”€â”€â”€ Mini Progress Bar Component â”€â”€â”€
 const ProgressBar = ({ value, max, color }) => {
@@ -112,11 +117,15 @@ const Results = () => {
 
   const tabs = [
     { key: "overview", label: "Overview" },
+    { key: "analytics", label: "📊 Analytics" },
+    { key: "heatmap", label: "🗺️ Heatmap" },
     { key: "skills", label: "Skills" },
     { key: "roles", label: "Job Roles" },
     { key: "feedback", label: "Feedback" },
     { key: "suggestions", label: "Suggestions" },
-    { key: "ai-builder", label: "âœ¨ AI Builder" },
+    { key: "jd-match", label: "JD Match" },
+    { key: "interview", label: "🎤 Interview" },
+    { key: "ai-builder", label: "✨ AI Builder" },
   ];
 
   return (
@@ -136,12 +145,15 @@ const Results = () => {
           >
             <FiArrowLeft /> Back to Dashboard
           </Link>
-          <button
-            onClick={handleDownloadReport}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 text-sm"
-          >
-            <FiDownload /> Download Report
-          </button>
+          <div className="flex items-center gap-2">
+            <VoiceFeedback resume={resume} />
+            <button
+              onClick={handleDownloadReport}
+              className="btn-primary flex items-center gap-2 !py-2.5 !px-5 text-sm"
+            >
+              <FiDownload /> Download Report
+            </button>
+          </div>
         </div>
 
         {/* â•â•â• Header Card â•â•â• */}
@@ -572,6 +584,34 @@ const Results = () => {
         {activeTab === "ai-builder" && (
           <div className="animate-fade-in">
             <AutoFixResume resumeId={id} />
+          </div>
+        )}
+
+        {/* ═══════ TAB: ANALYTICS ═══════ */}
+        {activeTab === "analytics" && (
+          <div className="animate-fade-in">
+            <AnalyticsCharts resume={resume} />
+          </div>
+        )}
+
+        {/* ═══════ TAB: HEATMAP ═══════ */}
+        {activeTab === "heatmap" && (
+          <div className="animate-fade-in">
+            <ResumeHeatmap sectionFeedback={resume.sectionFeedback} />
+          </div>
+        )}
+
+        {/* ═══════ TAB: JD MATCH ═══════ */}
+        {activeTab === "jd-match" && (
+          <div className="animate-fade-in">
+            <JDMatcher resumeId={id} />
+          </div>
+        )}
+
+        {/* ═══════ TAB: INTERVIEW ═══════ */}
+        {activeTab === "interview" && (
+          <div className="animate-fade-in">
+            <InterviewQuestions resumeId={id} />
           </div>
         )}
 

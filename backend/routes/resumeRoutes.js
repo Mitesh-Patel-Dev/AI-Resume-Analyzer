@@ -8,12 +8,13 @@ const {
     deleteResume,
 } = require("../controllers/resumeController");
 const { generateReport } = require("../controllers/reportController");
-const { generateOptimizedResume } = require("../controllers/aiController");
+const { generateOptimizedResume, generateInterviewQuestions } = require("../controllers/aiController");
+const { matchJobDescription } = require("../controllers/jdController");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Multer config — store uploaded PDFs in /uploads folder
+// Multer config
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, "..", "uploads"));
@@ -24,7 +25,6 @@ const storage = multer.diskStorage({
     },
 });
 
-// Only allow PDF files
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === "application/pdf") {
         cb(null, true);
@@ -36,12 +36,14 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage,
     fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// All routes are protected (require login)
+// All routes are protected
 router.post("/upload", protect, upload.single("resume"), uploadResume);
 router.post("/generate-optimized", protect, generateOptimizedResume);
+router.post("/:id/match-jd", protect, matchJobDescription);
+router.post("/:id/interview-questions", protect, generateInterviewQuestions);
 router.get("/my-resumes", protect, getMyResumes);
 router.get("/:id", protect, getResumeById);
 router.get("/:id/report", protect, generateReport);

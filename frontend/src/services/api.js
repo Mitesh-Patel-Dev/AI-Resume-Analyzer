@@ -33,4 +33,12 @@ export const getReportUrl = (id) => `/api/resume/${id}/report`;
 export const generateOptimizedResume = (resumeId) =>
     API.post("/resume/generate-optimized", { resumeId });
 
+// ─── JD Matching ───
+export const matchJobDescription = (resumeId, jdText) =>
+    API.post(`/resume/${resumeId}/match-jd`, { jdText });
+
+// ─── AI Interview Questions ───
+export const generateInterviewQuestions = (resumeId) =>
+    API.post(`/resume/${resumeId}/interview-questions`);
+
 export default API;

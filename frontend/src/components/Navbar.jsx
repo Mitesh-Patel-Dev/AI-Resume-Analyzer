@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { FiLogOut, FiUpload, FiGrid, FiUser, FiMenu, FiX, FiInfo } from "react-icons/fi";
+import { useTheme } from "../context/ThemeContext";
+import { FiLogOut, FiUpload, FiGrid, FiUser, FiMenu, FiX, FiInfo, FiSun, FiMoon } from "react-icons/fi";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
     const handleLogout = () => {
         logout();
@@ -80,8 +82,16 @@ const Navbar = () => {
                                 </Link>
 
                                 <button
+                                    onClick={toggleTheme}
+                                    className="ml-1 p-2 text-surface-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all"
+                                    title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                                >
+                                    {theme === 'dark' ? <FiSun className="text-[15px]" /> : <FiMoon className="text-[15px]" />}
+                                </button>
+
+                                <button
                                     onClick={handleLogout}
-                                    className="ml-1 p-2 text-surface-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                                    className="p-2 text-surface-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                                     title="Logout"
                                 >
                                     <FiLogOut className="text-[15px]" />
@@ -90,6 +100,12 @@ const Navbar = () => {
                         ) : (
                             <>
                                 <NavLink to="/about" icon={FiInfo} label="About" />
+                                <button
+                                    onClick={toggleTheme}
+                                    className="p-2 text-surface-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all"
+                                >
+                                    {theme === 'dark' ? <FiSun className="text-[15px]" /> : <FiMoon className="text-[15px]" />}
+                                </button>
                                 <div className="w-px h-5 bg-surface-800 mx-2" />
                                 <Link
                                     to="/login"
