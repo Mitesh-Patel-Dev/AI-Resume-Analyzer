@@ -48,7 +48,7 @@ const Signup = () => {
                         </svg>
                     </div>
                     <h2 className="heading-lg text-3xl text-white mb-4">
-                        Start your journey with ResumeAI
+                        Start your journey with AI Resume Analyzer
                     </h2>
                     <p className="text-surface-400 leading-relaxed mb-10">
                         Create your free account and get instant AI-powered resume analysis with actionable insights.

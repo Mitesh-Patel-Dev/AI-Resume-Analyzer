@@ -54,16 +54,27 @@ const About = () => {
                     </div>
                 </div>
 
-                {/* Developer */}
+                {/* Developers */}
                 <div className="card p-6 mb-8 animate-slide-up">
-                    <h2 className="heading-lg text-lg text-white mb-4">Developer</h2>
-                    <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center">
-                            <span className="text-lg font-bold text-white">MP</span>
+                    <h2 className="heading-lg text-lg text-white mb-5">Developers</h2>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="flex items-center gap-4 p-4 bg-surface-900/40 rounded-xl">
+                            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center flex-shrink-0">
+                                <span className="text-lg font-bold text-white">MP</span>
+                            </div>
+                            <div>
+                                <p className="font-heading font-semibold text-white text-lg">Mitesh Patel</p>
+                                <p className="text-surface-500 text-sm">BCA Student • Full-Stack Developer</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="font-heading font-semibold text-white text-lg">Mitesh Patel</p>
-                            <p className="text-surface-500 text-sm">BCA Student • Full-Stack Developer</p>
+                        <div className="flex items-center gap-4 p-4 bg-surface-900/40 rounded-xl">
+                            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-accent-500 to-brand-500 flex items-center justify-center flex-shrink-0">
+                                <span className="text-lg font-bold text-white">VM</span>
+                            </div>
+                            <div>
+                                <p className="font-heading font-semibold text-white text-lg">Vishal Mahto</p>
+                                <p className="text-surface-500 text-sm">BCA Student • Full-Stack Developer</p>
+                            </div>
                         </div>
                     </div>
                 </div>

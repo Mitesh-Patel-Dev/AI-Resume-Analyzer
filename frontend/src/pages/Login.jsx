@@ -41,7 +41,7 @@ const Login = () => {
                         </svg>
                     </div>
                     <h2 className="heading-lg text-3xl text-white mb-4">
-                        Welcome back to ResumeAI
+                        Welcome back to AI Resume Analyzer
                     </h2>
                     <p className="text-surface-400 leading-relaxed mb-10">
                         Continue optimizing your resume with AI-powered insights and ATS scoring.
